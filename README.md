@@ -23,6 +23,5 @@ Execute the Python script to launch the application:
 ```shell
 python reducedPDF.py
 ```
-Example Screenshot
 Below is a screenshot of the reducedPDF interface:
 ![screenshot reducedPDF](img/screen/reducedPDF.png)
