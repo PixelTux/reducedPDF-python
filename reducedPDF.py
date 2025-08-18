@@ -1,7 +1,7 @@
-#   Simple GUI that use goscreept to compress a pdf
+# Simple GUI that uses ghostscript to compress a PDF
 
-#   This app is thout for new people in linux that want 
-#   to compress a pdf and don't know how to use gosctip
+# This app is designed for new people in Linux who want
+# to compress a PDF and don't know how to use ghostscript
 
 # Importing modules
 import tkinter as tk
@@ -11,37 +11,34 @@ import subprocess
 
 class ReducePDFApp:
     def __init__(self, master):
-        # defining custom colors
-        self.color_green="#6CC86D"
-        color_blue="#1296CE"
-        color_white="#FBFBFF"
-        color_black="#040F16"
-        color_grey="#DDDEE2"
-        
-        # define the dictionary
+        # Defining custom colors
+        self.color_green = "#6CC86D"
+        self.color_blue = "#1296CE"
+        self.color_white = "#FBFBFF"
+        self.color_black = "#040F16"
+        self.color_grey = "#DDDEE2"
+
+        # Define dictionaries for file info
         self.original_file = {}
-        self.compresed_file = {}
+        self.compressed_file = {}
 
-        # set some costum defolt value
+        # Set some custom default values
         self.master = master
-        master['bg']=color_white
+        master['bg'] = self.color_white
         master.geometry("1000x620")
-        master.option_add( "*font", "Times 12" )
-        master.option_add( "*background", color_white )
-        master.option_add( "*fg", color_black )
+        master.option_add("*font", "Times 12")
+        master.option_add("*background", self.color_white)
+        master.option_add("*fg", self.color_black)
 
-        # title
+        # Title
         master.title("reducePDF - Reduce the size of your PDF")
 
-        # creating a Frames, which can expand according to the size of the window
+        # Creating Frames, which can expand according to the size of the window
         pane_title_label = Frame(master)
         pane_title_label.pack(fill="x", padx=10, pady=35, side="top")
 
         pane_select_pdf = Frame(master)
         pane_select_pdf.pack(fill="x", padx=10, pady=5, side="top")
-
-        pane_save_pdf = Frame(master)
-        pane_save_pdf.pack(fill="x", padx=10, pady=5, side="top")
 
         pane_quality_options = Frame(master)
         pane_quality_options.pack(fill="x", padx=6, pady=5, side="top")
@@ -49,43 +46,42 @@ class ReducePDFApp:
         pane_output_label = Frame(master)
         pane_output_label.pack(fill="x", padx=10, pady=20, side="top")
 
-        # app name
-        tk.Label(pane_title_label, text="reducePDF", font=("Times New Roman", 26,"italic", "bold"), bg=color_white).pack(fill="both", expand=False)
-        tk.Label(pane_title_label, text="Reduce the size of your PDF", font=("Times New Roman", 11,"italic"), bg=color_white,fg=self.color_green).pack(fill="both", expand=False)
-        
-        # select a PDF file
-        self.original_file['path'] = tk.StringVar()
-        self.compresed_file['name'] = tk.StringVar()
-        self.new_file_name = tk.StringVar()
-        tk.Label(pane_select_pdf, text="Select a PDF:", width=18, bg=color_white).pack(side='left', expand=False)
-        tk.Entry(pane_select_pdf, textvariable=self.original_file['path'], state="readonly", readonlybackground=color_white).pack(side='left', expand=True, fill="x")
-        tk.Button(pane_select_pdf, text="Browse", command=self.browse_pdf, background=color_grey, activebackground=color_blue).pack(side='right', expand=False, fill="x")
+        # App name
+        tk.Label(pane_title_label, text="reducePDF", font=("Times New Roman", 26, "italic", "bold"), bg=self.color_white).pack(fill="both", expand=False)
+        tk.Label(pane_title_label, text="Reduce the size of your PDF", font=("Times New Roman", 11, "italic"), bg=self.color_white, fg=self.color_green).pack(fill="both", expand=False)
 
-        # compression quality options
+        # Select a PDF file
+        self.original_file['path'] = tk.StringVar()
+        self.new_file_name = tk.StringVar()
+        tk.Label(pane_select_pdf, text="Select a PDF:", width=18, bg=self.color_white).pack(side='left', expand=False)
+        tk.Entry(pane_select_pdf, textvariable=self.original_file['path'], state="readonly", readonlybackground=self.color_white).pack(side='left', expand=True, fill="x")
+        tk.Button(pane_select_pdf, text="Browse", command=self.browse_pdf, background=self.color_grey, activebackground=self.color_blue).pack(side='right', expand=False, fill="x")
+
+        # Compression quality options
         self.compression_quality = tk.StringVar(value="ebook")
 
-        # create toggle buttons
-        self.button_screen = tk.Radiobutton(pane_quality_options, text="screen", value="screen", variable=self.compression_quality, indicatoron=0, width=7,pady=2, relief="raised", background=color_grey, selectcolor=self.color_green, activebackground=self.color_green).pack(side ='left', expand = True, fill="x", padx=2)
-        self.button_ebook = tk.Radiobutton(pane_quality_options, text="ebook", value="ebook", variable=self.compression_quality, indicatoron=0, width=7,pady=2, relief="sunken", background=color_grey, selectcolor=self.color_green, activebackground=self.color_green).pack(side ='left', expand = True, fill="x", padx=2)
-        self.button_printer = tk.Radiobutton(pane_quality_options, text="printer", value="printer", variable=self.compression_quality, indicatoron=0, width=7,pady=2, relief="raised", background=color_grey, selectcolor=self.color_green, activebackground=self.color_green).pack(side ='left', expand = True, fill="x", padx=2)
-        self.button_prepress = tk.Radiobutton(pane_quality_options, text="prepress", value="prepress", variable=self.compression_quality, indicatoron=0, width=7,pady=2, relief="raised", background=color_grey, selectcolor=self.color_green, activebackground=self.color_green).pack(side ='left', expand = True, fill="x",  padx=2)
-        
-        # add a label to show the current selection
-        tk.Label(pane_output_label, text="Level of compression:", bg=color_white).pack()
+        # Create toggle buttons (radio buttons styled as buttons)
+        tk.Radiobutton(pane_quality_options, text="screen", value="screen", variable=self.compression_quality, indicatoron=0, width=7, pady=2, relief="raised", background=self.color_grey, selectcolor=self.color_green, activebackground=self.color_green).pack(side='left', expand=True, fill="x", padx=2)
+        tk.Radiobutton(pane_quality_options, text="ebook", value="ebook", variable=self.compression_quality, indicatoron=0, width=7, pady=2, relief="raised", background=self.color_grey, selectcolor=self.color_green, activebackground=self.color_green).pack(side='left', expand=True, fill="x", padx=2)
+        tk.Radiobutton(pane_quality_options, text="printer", value="printer", variable=self.compression_quality, indicatoron=0, width=7, pady=2, relief="raised", background=self.color_grey, selectcolor=self.color_green, activebackground=self.color_green).pack(side='left', expand=True, fill="x", padx=2)
+        tk.Radiobutton(pane_quality_options, text="prepress", value="prepress", variable=self.compression_quality, indicatoron=0, width=7, pady=2, relief="raised", background=self.color_grey, selectcolor=self.color_green, activebackground=self.color_green).pack(side='left', expand=True, fill="x", padx=2)
+
+        # Add a label to show the current selection
+        tk.Label(pane_output_label, text="Level of compression:", bg=self.color_white).pack()
         self.output_label = tk.Label(pane_output_label, text=self.compression_quality.get().upper(), bg=self.color_green)
         self.output_label.pack()
 
-        # set the command to update the label when a button is toggled
+        # Set the command to update the label when a button is toggled
         self.compression_quality.trace("w", self.update_label)
 
-        # compress button
-        tk.Button(master, text="Compress", command=self.compress_pdf, background=color_grey, height=2, width=15, activebackground=color_blue, borderwidth=10 ).pack(side='top', expand=False, pady=20)
+        # Compress button
+        tk.Button(master, text="Compress", command=self.compress_pdf, background=self.color_grey, height=2, width=15, activebackground=self.color_blue, borderwidth=10).pack(side='top', expand=False, pady=20)
 
-    # Update the selected lable with the selecte value
+    # Update the selected label with the selected value
     def update_label(self, *args):
         self.output_label.configure(text=self.compression_quality.get().upper(), bg=self.color_green)
 
-    # Browse to the pdf 
+    # Browse to the PDF
     def browse_pdf(self):
         pdf_file = filedialog.askopenfilename(filetypes=[("PDF files", "*.pdf")])
         if pdf_file:
@@ -94,73 +90,85 @@ class ReducePDFApp:
 
     # Auto select the file name based on the compression level
     def save_as(self):
-        self.new_file_name.set( os.path.splitext(os.path.basename(self.original_file['path'].get()))[0] + '_' + self.compression_quality.get() + '_comp')
-        basename = self.new_file_name.get()    
-        while_loop_nuber = 1
-        file_name = self.original_file['folder'] + "/" + self.new_file_name.get()+".pdf"
+        basename = os.path.splitext(os.path.basename(self.original_file['path'].get()))[0] + '_' + self.compression_quality.get() + '_comp'
+        self.new_file_name.set(basename)
+        loop_number = 1
+        file_name = os.path.join(self.original_file['folder'], self.new_file_name.get() + ".pdf")
         while os.path.isfile(file_name):
-            self.new_file_name.set("{}_({})".format(basename, while_loop_nuber))
-            file_name = self.original_file['folder'] + "/" + self.new_file_name.get() + ".pdf"
-            while_loop_nuber += 1
+            self.new_file_name.set(f"{basename}_({loop_number})")
+            file_name = os.path.join(self.original_file['folder'], self.new_file_name.get() + ".pdf")
+            loop_number += 1
         self.new_file_name.set(self.new_file_name.get() + '.pdf')
 
-    # Auto select the unit tu use fore the fiel size 
-    def get_unit(self, bytes):
-        size = bytes
-        memory_units = ['B','KB','MB','GB','TB']
+    # Auto select the unit to use for the file size (using 1024 for binary prefixes)
+    def get_unit(self, bytes_size):
+        size = bytes_size
+        memory_units = ['B', 'KB', 'MB', 'GB', 'TB']
         i = 0
-        while size >= 1000:
-            size = size/1000
-            i += 1 
-        return {"size":format(size,'.2f'), "unit":memory_units[i]}
-    
-    # Get compression change in prcentage 
-    def get_change(self, current, previous):
-        if current == previous:
-            return 100.0
-        try:
-            return (current - previous) / previous * 100.0
-        except ZeroDivisionError:
-            return 0
+        while size >= 1024:
+            size /= 1024
+            i += 1
+        return {"size": format(size, '.2f'), "unit": memory_units[i]}
+
+    # Get compression change in percentage (positive for reduction)
+    def get_change(self, old_size, new_size):
+        if old_size == 0:
+            return 0.0
+        change = (old_size - new_size) / old_size * 100.0
+        return format(change, '.2f')
 
     # Compress the PDF
     def compress_pdf(self):
-        # check that a PDF file has been selected
+        # Check that a PDF file has been selected
         if not self.original_file['path'].get():
-            messagebox.showwarning("Missing PDF Files!!!", "Please select a PDF file")
+            messagebox.showwarning("Missing PDF File", "Please select a PDF file")
             return
-        
+
         self.save_as()
 
-        # compouse and run the gosctip
-        self.compresed_file['path']= self.original_file['folder'] + "/" + self.new_file_name.get()
-        gs_cmd = f"gs -sDEVICE=pdfwrite -dCompatibilityLevel=1.4 -dPDFSETTINGS=/{self.compression_quality.get()} -dNOPAUSE -dQUIET -dBATCH -sOutputFile='{self.compresed_file['path']}' '{self.original_file['path'].get()}'"
-        subprocess.run(gs_cmd, shell=True)
-        self.save_as()
+        # Compose and run the ghostscript command
+        self.compressed_file['path'] = os.path.join(self.original_file['folder'], self.new_file_name.get())
+        gs_cmd = [
+            "gs",
+            "-sDEVICE=pdfwrite",
+            "-dCompatibilityLevel=1.4",
+            f"-dPDFSETTINGS=/{self.compression_quality.get()}",
+            "-dNOPAUSE",
+            "-dQUIET",
+            "-dBATCH",
+            f"-sOutputFile={self.compressed_file['path']}",
+            self.original_file['path'].get()
+        ]
 
-        # get the size 
+        try:
+            subprocess.run(gs_cmd, check=True)
+        except subprocess.CalledProcessError as e:
+            messagebox.showerror("Compression Error", f"Failed to compress PDF: {e}")
+            return
+        except FileNotFoundError:
+            messagebox.showerror("Ghostscript Not Found", "Ghostscript is not installed or not in PATH.")
+            return
+
+        # Get the sizes
         self.original_file['size'] = os.path.getsize(self.original_file['path'].get())
-        self.compresed_file['size'] = os.path.getsize(self.compresed_file['path'])
+        self.compressed_file['size'] = os.path.getsize(self.compressed_file['path'])
 
-        # get change in percentage [new_size, old_size]
-        change = self.get_change(self.compresed_file['size'], self.original_file['size'])
-        change = format(change, '.2f')
+        # Get change in percentage (reduction)
+        change = self.get_change(self.original_file['size'], self.compressed_file['size'])
 
-        # auto select readable size and unit as dictionary [size, unit]
-        for x, y in self.get_unit(self.original_file['size']).items():
-            self.original_file[x] = y
-        for x, y in self.get_unit(self.compresed_file['size']).items():
-            self.compresed_file[x] = y
+        # Auto select readable size and unit as dictionary [size, unit]
+        self.original_file.update(self.get_unit(self.original_file['size']))
+        self.compressed_file.update(self.get_unit(self.compressed_file['size']))
 
-        # compuse the message to print in the message box 
-        m_original = "Original size \n" + self.original_file['size'] + self.original_file['unit']+"\n"
-        m_compresed = "Compressed size \n"+ self.compresed_file['size'] + self.compresed_file['unit']+"\n"
-        m_change = "Change \n" + change + "%" + "\n"
-        m_save_in = "Save in \n" + self.compresed_file['path']
-        m_all = m_original + m_compresed + m_change + m_save_in
+        # Compose the message to print in the message box
+        m_original = f"Original size: {self.original_file['size']} {self.original_file['unit']}\n"
+        m_compressed = f"Compressed size: {self.compressed_file['size']} {self.compressed_file['unit']}\n"
+        m_change = f"Reduced by: {change}%\n"
+        m_save_in = f"Saved in: {self.compressed_file['path']}"
+        m_all = m_original + m_compressed + m_change + m_save_in
 
-        # Message box after succes compression 
-        messagebox.showinfo("Success", f"{m_all}")
+        # Message box after successful compression
+        messagebox.showinfo("Success", m_all)
 
 root = tk.Tk()
 app = ReducePDFApp(root)
