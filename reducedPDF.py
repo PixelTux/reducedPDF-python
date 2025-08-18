@@ -1,7 +1,8 @@
 # Simple GUI that uses ghostscript to compress a PDF
 
-# This app is designed for new people in Linux who want
-# to compress a PDF and don't know how to use ghostscript
+# It’s designed for users who prefer a graphical interface
+# over ghostscript command-line tools, making it easy to reduce PDF file
+# sizes without technical hassle.
 
 # Importing modules
 import tkinter as tk
